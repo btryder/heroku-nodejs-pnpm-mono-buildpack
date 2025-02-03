@@ -321,10 +321,15 @@ pnpm_install() {
   local build_dir=${1:-}
   local cache_dir=${2:-}
 
-  echo "Running 'pnpm install' with pnpm-lock.yaml"
+  echo "Running 'pnpm install --prod' with pnpm-lock.yaml"
   cd "$build_dir" || return
 
-  monitor "pnpm-install" pnpm install --prod --frozen-lockfile 2>&1
+  if [ -n "$APP_NAME" ]; then
+    echo "Installing dependencies for app '$APP_NAME'"
+    monitor "pnpm-install" pnpm --filter "$APP_NAME" install --prod --frozen-lockfile 2>&1
+  else
+    monitor "pnpm-install" pnpm install --prod --frozen-lockfile 2>&1
+  fi
 
   # prune the store when the counter reaches zero to clean up errant package versions which may have been upgraded/removed
   counter=$(load_pnpm_prune_store_counter "$cache_dir")

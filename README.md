@@ -1,3 +1,14 @@
+## Fork Disclaimer
+
+This fork modifies the official Node.js buildpack to add enhanced PNPM support. Specifically, when using PNPM, the buildpack will:
+
+- Install production dependencies using `pnpm install --prod --frozen-lockfile`
+- If `APP_NAME` is set, it will scope the installation using `pnpm --filter "$APP_NAME"`  
+- Automatically clean up the PNPM store periodically to remove unused packages
+
+These changes can be found in `lib/dependencies.sh`.
+
+
 # Heroku Buildpack for Node.js
 
 ![nodejs](https://cloud.githubusercontent.com/assets/51578/13712672/efdf2a40-e792-11e5-82ef-492478cbc0dc.png)
