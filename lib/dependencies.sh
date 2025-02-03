@@ -326,9 +326,9 @@ pnpm_install() {
 
   if [ -n "$APP_NAME" ]; then
     echo "Installing dependencies for app '$APP_NAME'"
-    monitor "pnpm-install" pnpm --filter "$APP_NAME" install --frozen-lockfile 2>&1
+    monitor "pnpm-install" pnpm --filter "$APP_NAME" install --frozen-lockfile --prod=false 2>&1
   else
-    monitor "pnpm-install" pnpm install --frozen-lockfile 2>&1
+    monitor "pnpm-install" pnpm install --frozen-lockfile --prod=false 2>&1
   fi
 
   # prune the store when the counter reaches zero to clean up errant package versions which may have been upgraded/removed
