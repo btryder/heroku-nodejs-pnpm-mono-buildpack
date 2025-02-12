@@ -325,21 +325,10 @@ pnpm_install() {
   cd "$build_dir" || return
 
   if [ -n "$APP_NAME" ]; then
-    if [[ "$APP_NAME" == *","* ]]; then
-      IFS=',' read -ra apps_array <<< "$APP_NAME"
-      trimmed_apps=()
-      filters=()
-      for app in "${apps_array[@]}"; do
-        trimmed=$(echo "$app" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-        trimmed_apps+=("$trimmed")
-        filters+=(--filter "$trimmed")
-      done
-      echo "Installing dependencies for apps: ${trimmed_apps[*]}"
-      monitor "pnpm-install" pnpm "${filters[@]}" install --frozen-lockfile --prod=false 2>&1
-    else
-      echo "Installing dependencies for app '$APP_NAME'"
-      monitor "pnpm-install" pnpm --filter "$APP_NAME" install --frozen-lockfile --prod=false 2>&1
-    fi
+    echo "Installing dependencies for app '$APP_NAME'"
+    monitor "pnpm-install" pnpm --filter "$APP_NAME" install --frozen-lockfile --prod=false 2>&1
+    echo "Installing dependencies for hard coded package @repo/db"
+    monitor "pnpm-install" pnpm --filter "@repo/db" install --frozen-lockfile --prod=false 2>&1
   else
     monitor "pnpm-install" pnpm install --frozen-lockfile --prod=false 2>&1
   fi
